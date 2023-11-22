@@ -2,7 +2,7 @@ import { APIGatewayEvent } from "aws-lambda";
 
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument, DeleteCommandInput } from "@aws-sdk/lib-dynamodb";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import { AuthObject } from "../types";
 
 const client = new DynamoDB({});

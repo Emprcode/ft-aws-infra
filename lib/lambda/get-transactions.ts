@@ -2,7 +2,7 @@ import { DynamoDB, Select } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayEvent } from "aws-lambda";
 import { AuthObject } from "../types";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 const client = new DynamoDB({});
 const docClient = DynamoDBDocument.from(client);
@@ -22,6 +22,7 @@ export const handler = async (event: APIGatewayEvent) => {
   if (event.headers.Authorization) {
     const authToken = event.headers.Authorization.split(" ")[1];
     const authObject: AuthObject = jwt.decode(authToken);
+
     const userId = authObject["cognito:username"];
 
     const params: QueryCommandInput = {
