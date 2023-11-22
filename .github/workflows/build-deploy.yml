@@ -1,4 +1,4 @@
-name: Finance Tracker Deploy AWS
+name: Finance Tracker Infra CDK Deployment
 on:
   push:
     branches:
@@ -37,4 +37,4 @@ jobs:
           name: build
           path: ./build
       - run: ls
-      - run: aws s3 sync ./build s3://${{ vars.DEPLOY_BUCKET }} --delete
+      - run: npx cdk deploy --auto-approve
