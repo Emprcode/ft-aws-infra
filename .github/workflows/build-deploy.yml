@@ -1,0 +1,40 @@
+name: Finance Tracker Deploy AWS
+on:
+  push:
+    branches:
+      - main
+env:
+  AWS_REGION: ap-southeast-2
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - run: npm ci
+      - run: npm run build --if-present
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.IAM_ROLE }}
+          aws-region: ap-southeast-2
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: ./build
+      - run: ls
+      - run: aws s3 sync ./build s3://${{ vars.DEPLOY_BUCKET }} --delete
