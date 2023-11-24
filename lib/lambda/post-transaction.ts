@@ -31,7 +31,9 @@ export const handler = async (event: APIGatewayEvent) => {
     const transactionId = uuidv4();
 
     const authToken = event.headers.Authorization.split(" ")[1];
+
     const authObject: AuthObject = jwt.decode(authToken);
+
     const userId = authObject["cognito:username"];
 
     const payload: Payload = JSON.parse(event.body);
