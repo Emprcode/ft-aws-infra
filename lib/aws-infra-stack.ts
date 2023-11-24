@@ -71,7 +71,7 @@ export class AwsInfraStack extends cdk.Stack {
 
     const userPool = UserPool.fromUserPoolId(
       this,
-      process.env.USERPOOL || "",
+      "userpool",
       process.env.USERPOOL_ID || ""
     );
     const auth = new CognitoUserPoolsAuthorizer(this, "authUser", {

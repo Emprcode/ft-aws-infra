@@ -26,4 +26,4 @@ jobs:
         with:
           role-to-assume: ${{ vars.IAM_ROLE }}
           aws-region: ap-southeast-2
-      - run: npx cdk diff
+      - run: printenv && npx cdk diff
