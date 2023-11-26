@@ -1,9 +1,6 @@
 name: Finance Tracker Infra CDK Deployment
 on:
   pull_request:
-    types:
-      - opened
-      - edited
     branches:
       - main
 env:
