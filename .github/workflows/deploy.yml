@@ -1,0 +1,27 @@
+name: Finance Tracker Infra CDK Deployment
+on:
+  push:
+    branches:
+      - main
+env:
+  AWS_REGION: ap-southeast-2
+  USERPOOL_ID: ${{ vars.USERPOOL_ID }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - run: npm ci
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.IAM_ROLE }}
+          aws-region: ap-southeast-2
+      - run: npx cdk deploy --auto-approve
