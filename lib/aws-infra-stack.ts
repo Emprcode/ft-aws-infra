@@ -13,7 +13,11 @@ import {
 } from "aws-cdk-lib/aws-apigateway";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import * as dotenv from "dotenv";
-import { Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
+import {
+  BlockPublicAccess,
+  Bucket,
+  BucketEncryption,
+} from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
 dotenv.config();
 
@@ -104,7 +108,14 @@ export class AwsInfraStack extends cdk.Stack {
       websiteIndexDocument: "index.html",
       publicReadAccess: true,
       encryption: BucketEncryption.S3_MANAGED,
+      blockPublicAccess: {
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      },
       versioned: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     new StringParameter(this, "HostingBucketNameParameter", {
