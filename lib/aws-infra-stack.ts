@@ -13,6 +13,8 @@ import {
 } from "aws-cdk-lib/aws-apigateway";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import * as dotenv from "dotenv";
+import { Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 dotenv.config();
 
 export class AwsInfraStack extends cdk.Stack {
@@ -95,6 +97,19 @@ export class AwsInfraStack extends cdk.Stack {
 
     transaction.addMethod("DELETE", new LambdaIntegration(deleteFunc), {
       authorizer: auth,
+    });
+
+    //s3 bucket for web hosting
+    const hostingBucket = new Bucket(this, "HostingBucket", {
+      websiteIndexDocument: "index.html",
+      publicReadAccess: true,
+      encryption: BucketEncryption.S3_MANAGED,
+      versioned: true,
+    });
+
+    new StringParameter(this, "HostingBucketNameParameter", {
+      stringValue: hostingBucket.bucketName,
+      parameterName: "/finance-tracker/hosting-bucket-name",
     });
   }
 }
