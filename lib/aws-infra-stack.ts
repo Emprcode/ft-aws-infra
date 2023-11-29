@@ -19,6 +19,7 @@ import {
   BucketEncryption,
 } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import { ApiGateway } from "aws-cdk-lib/aws-events-targets";
 dotenv.config();
 
 export class AwsInfraStack extends cdk.Stack {
@@ -87,6 +88,12 @@ export class AwsInfraStack extends cdk.Stack {
     const restApi = new RestApi(this, "transactionApi", {
       endpointTypes: [EndpointType.REGIONAL],
     });
+    //restapi
+    new StringParameter(this, "ApiGatewayUrlParam", {
+      stringValue: restApi.url,
+      parameterName: "/finance-tracker/api-endpoint",
+    });
+
     const transaction = restApi.root.addResource("transactions", {
       defaultCorsPreflightOptions: {
         allowOrigins: Cors.ALL_ORIGINS,
