@@ -1,9 +1,8 @@
-name: Finance Tracker Infra CDK Deployment
+name: Destroy
 on:
   workflow_dispatch: {}
 env:
   AWS_REGION: ap-southeast-2
-  USERPOOL_ID: ${{ vars.USERPOOL_ID }}
 jobs:
   infra-destroy:
     runs-on: ubuntu-latest
@@ -22,4 +21,4 @@ jobs:
         with:
           role-to-assume: ${{ vars.IAM_ROLE }}
           aws-region: ap-southeast-2
-      - run: npx cdk destroy
+      - run: npx cdk destroy --auto-approve
