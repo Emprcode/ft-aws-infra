@@ -123,6 +123,7 @@ export class AwsInfraStack extends cdk.Stack {
       },
       versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     new StringParameter(this, "HostingBucketNameParameter", {
