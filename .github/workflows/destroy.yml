@@ -3,6 +3,7 @@ on:
   workflow_dispatch: {}
 env:
   AWS_REGION: ap-southeast-2
+  USERPOOL_ID: ${{ vars.USERPOOL_ID }}
 jobs:
   infra-destroy:
     runs-on: ubuntu-latest
