@@ -24,6 +24,7 @@ interface AwsInfraStacksProps extends cdk.StackProps {
 export class AwsInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsInfraStacksProps) {
     super(scope, id, props);
+    const { envName } = props;
     const table = new Table(this, "transactionTable", {
       partitionKey: {
         name: "userId",
@@ -90,7 +91,7 @@ export class AwsInfraStack extends cdk.Stack {
     //restapi
     new StringParameter(this, "ApiGatewayUrlParam", {
       stringValue: restApi.url,
-      parameterName: "/finance-tracker/api-endpoint",
+      parameterName: `/${envName}/finance-tracker/api-endpoint`.toLowerCase(),
     });
 
     const transaction = restApi.root.addResource("transactions", {
@@ -127,7 +128,8 @@ export class AwsInfraStack extends cdk.Stack {
 
     new StringParameter(this, "HostingBucketNameParameter", {
       stringValue: hostingBucket.bucketName,
-      parameterName: `/${props.envName}/finance-tracker/hosting-bucket-name`,
+      parameterName:
+        `/${envName}/finance-tracker/hosting-bucket-name`.toLowerCase(),
     });
   }
 }
