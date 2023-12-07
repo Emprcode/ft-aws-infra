@@ -3,11 +3,14 @@ import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
 import { AwsInfraStack } from "../lib/aws-infra-stack";
 
+const envs = ["Dev", "Staging", "Prod"];
 const app = new cdk.App();
-new AwsInfraStack(app, "AwsInfraStack", {
-  env: {
-    region: "ap-southeast-2",
-  },
+envs.map((env) => {
+  new AwsInfraStack(app, `${env}-AwsInfraStack`, {
+    env: {
+      region: "ap-southeast-2",
+    },
+  });
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
