@@ -13,17 +13,16 @@ import {
 } from "aws-cdk-lib/aws-apigateway";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import * as dotenv from "dotenv";
-import {
-  BlockPublicAccess,
-  Bucket,
-  BucketEncryption,
-} from "aws-cdk-lib/aws-s3";
+import { Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { ApiGateway } from "aws-cdk-lib/aws-events-targets";
 dotenv.config();
 
+interface AwsInfraStacksProps extends cdk.StackProps {
+  envName: string;
+}
+
 export class AwsInfraStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: AwsInfraStacksProps) {
     super(scope, id, props);
     const table = new Table(this, "transactionTable", {
       partitionKey: {
@@ -111,7 +110,7 @@ export class AwsInfraStack extends cdk.Stack {
     });
 
     //s3 bucket for web hosting
-    const hostingBucket = new Bucket(this, "HostingBucket", {
+    const hostingBucket = new Bucket(this, `${props.envName}-HostingBucket`, {
       websiteIndexDocument: "index.html",
       publicReadAccess: true,
       encryption: BucketEncryption.S3_MANAGED,
