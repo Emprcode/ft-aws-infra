@@ -1,6 +1,17 @@
 name: Destroy
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      EnvName:
+        description: "Environment to destroy"
+        required: true
+        default: "Dev"
+        type: choice
+        options:
+          - Dev
+          - Staging
+          - Prod
+
 env:
   AWS_REGION: ap-southeast-2
   USERPOOL_ID: ${{ vars.USERPOOL_ID }}
@@ -22,4 +33,4 @@ jobs:
         with:
           role-to-assume: ${{ vars.IAM_ROLE }}
           aws-region: ap-southeast-2
-      - run: npx cdk destroy --auto-approve
+      - run: npx cdk destroy ${{ inputs.EnvName }}-AwsInfraStack --auto-approve
