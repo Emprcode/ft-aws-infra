@@ -110,7 +110,7 @@ export class AwsInfraStack extends cdk.Stack {
     });
 
     //s3 bucket for web hosting
-    const hostingBucket = new Bucket(this, `${props.envName}-HostingBucket`, {
+    const hostingBucket = new Bucket(this, "HostingBucket", {
       websiteIndexDocument: "index.html",
       publicReadAccess: true,
       encryption: BucketEncryption.S3_MANAGED,
@@ -127,7 +127,7 @@ export class AwsInfraStack extends cdk.Stack {
 
     new StringParameter(this, "HostingBucketNameParameter", {
       stringValue: hostingBucket.bucketName,
-      parameterName: "/finance-tracker/hosting-bucket-name",
+      parameterName: `/${props.envName}/finance-tracker/hosting-bucket-name`,
     });
   }
 }
